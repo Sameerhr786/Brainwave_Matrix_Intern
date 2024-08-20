@@ -1,0 +1,46 @@
++-------------+
+            |    Member   |
+            +-------------+
+            | MemberID    |
+            | FirstName   |
+            | LastName    |
+            | Email       |
+            | PhoneNo     |
+            | Address     |
+            +-------------+
+                   |
+                   |
+                   v
+            +-------------+
+            |  Borrowing  |
+            +-------------+
+            | BorrowingID |
+            | MemberID    |
+            | BookID      |
+            | CheckoutDate|
+            | DueDate     |
+            | ReturnDate  |
+            +-------------+
+                   |
+                   |
+                   v
+            +-------------+
+            |    Book     |
+            +-------------+
+            | BookID      |
+            | Title       |
+            | Author      |
+            | Publisher   |
+            | PublishYear |
+            | ISBN        |
+            | CategoryID  |
+            +-------------+
+                   |
+                   |
+                   v
+            +-------------+
+            |   Category  |
+            +-------------+
+            | CategoryID  |
+            | CategoryName|
+            +-------------+
