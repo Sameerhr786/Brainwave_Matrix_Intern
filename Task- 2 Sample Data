@@ -1,0 +1,44 @@
+Patients Table
+
+INSERT INTO Patients (FirstName, LastName, DOB, Gender, Phone, Address) VALUES
+('Alice', 'Johnson', '1985-06-15', 'Female', '555-1234', '101 Main St'),
+('Bob', 'Smith', '1990-03-22', 'Male', '555-5678', '202 Elm St'),
+('Charlie', 'Brown', '1978-11-05', 'Male', '555-8765', '303 Pine St'),
+('Diana', 'Prince', '1995-01-12', 'Female', '555-4321', '404 Maple St'),
+('Ethan', 'Hunt', '1982-08-30', 'Male', '555-3456', '505 Oak St');
+
+Doctors Table
+
+INSERT INTO Doctors (FirstName, LastName, Specialization, Phone, Email) VALUES
+('Dr. Emily', 'Clark', 'Pediatrics', '555-8765', 'emily.clark@hospital.com'),
+('Dr. John', 'Doe', 'Cardiology', '555-4321', 'john.doe@hospital.com'),
+('Dr. Sarah', 'Connor', 'Orthopedics', '555-9876', 'sarah.connor@hospital.com'),
+('Dr. Bruce', 'Wayne', 'Dermatology', '555-6543', 'bruce.wayne@hospital.com'),
+('Dr. Tony', 'Stark', 'Neurology', '555-3210', 'tony.stark@hospital.com');
+
+Appointments Table
+
+INSERT INTO Appointments (PatientID, DoctorID, AppointmentDate, Status) VALUES
+(1, 1, '2024-09-01 10:00:00', 'Scheduled'),
+(2, 2, '2024-09-02 11:30:00', 'Scheduled'),
+(3, 3, '2024-09-03 09:15:00', 'Completed'),
+(4, 4, '2024-09-04 14:00:00', 'Canceled'),
+(5, 5, '2024-09-05 16:45:00', 'Scheduled');
+
+Treatments Table
+
+INSERT INTO Treatments (AppointmentID, Diagnosis, Prescription, Notes) VALUES
+(1, 'Routine Checkup', 'Multivitamins', 'Follow up in 6 months'),
+(2, 'Chest Pain', 'Beta Blockers', 'Monitor heart rate'),
+(3, 'Knee Pain', 'Pain Relief', 'Recommend physiotherapy'),
+(4, 'Skin Rash', 'Topical Cream', 'Avoid allergens'),
+(5, 'Headache', 'Pain Reliever', 'Stay hydrated');
+
+Bill Table
+
+INSERT INTO Bills (PatientID, Amount, BillDate, Status) VALUES
+(1, 150.00, '2024-09-01', 'Paid'),
+(2, 200.00, '2024-09-02', 'Pending'),
+(3, 100.00, '2024-09-03', 'Paid'),
+(4, 75.00, '2024-09-04', 'Canceled'),
+(5, 120.00, '2024-09-05', 'Paid');
