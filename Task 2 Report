@@ -1,0 +1,164 @@
+Hospital Database Project Submission Report
+
+1. Introduction
+This report outlines the development of a hospital database designed to manage patient information, doctor details, appointments, treatments, and billing. The database facilitates efficient handling of hospital operations and improves the management of healthcare services.
+
+
+Entity Relationship Diagram (ERD)
+
++----------------+        +----------------+        +----------------+
+|    Patients    |        |    Doctors     |        |  Appointments  |
+|----------------|        |----------------|        |----------------|
+| PatientID (PK) |<------M| DoctorID (PK)  |<------M| AppointmentID (PK)|
+| FirstName      |        | FirstName      |        | PatientID (FK) |
+| LastName       |        | LastName       |        | DoctorID (FK)  |
+| DOB            |        | Specialization  |        | AppointmentDate |
+| Gender         |        | Phone          |        | Status         |
+| Phone          |        | Email          |        +----------------+
+| Address        |        +----------------+
++----------------+
+         |
+         |
+         | 1
+         |
+         | M
++----------------+        +----------------+
+|    Bills       |        |   Treatments    |
+|----------------|        |----------------|
+| BillID (PK)    |        | TreatmentID (PK)|
+| PatientID (FK) |        | AppointmentID (FK)|
+| Amount         |        | Diagnosis       |
+| BillDate       |        | Prescription    |
+| Status         |        | Notes           |
++----------------+        +----------------+
+
+
+2. Database Design
+
+Entities and Tables
+The database consists of the following tables:
+
+Patients
+Attributes: PatientID, FirstName, LastName, DOB, Gender, Phone, Address
+Doctors
+Attributes: DoctorID, FirstName, LastName, Specialization, Phone, Email
+Appointments
+Attributes: AppointmentID, PatientID, DoctorID, AppointmentDate, Status
+Treatments
+Attributes: TreatmentID, AppointmentID, Diagnosis, Prescription, Notes
+Bills
+Attributes: BillID, PatientID, Amount, BillDate, Status
+
+3. SQL Implementation
+SQL Queries for Table Creation
+CREATE TABLE Patients (
+    PatientID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DOB DATE,
+    Gender VARCHAR(10),
+    Phone VARCHAR(15),
+    Address VARCHAR(255)
+);
+
+CREATE TABLE Doctors (
+    DoctorID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Specialization VARCHAR(100),
+    Phone VARCHAR(15),
+    Email VARCHAR(100)
+);
+
+CREATE TABLE Appointments (
+    AppointmentID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    DoctorID INT,
+    AppointmentDate DATETIME,
+    Status VARCHAR(20),
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+
+CREATE TABLE Treatments (
+    TreatmentID INT PRIMARY KEY AUTO_INCREMENT,
+    AppointmentID INT,
+    Diagnosis VARCHAR(255),
+    Prescription TEXT,
+    Notes TEXT,
+    FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID)
+);
+
+CREATE TABLE Bills (
+    BillID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    Amount DECIMAL(10, 2),
+    BillDate DATETIME,
+    Status VARCHAR(20),
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
+);
+
+SQL Queries for Data Insertion
+INSERT INTO Patients (FirstName, LastName, DOB, Gender, Phone, Address) VALUES
+('Alice', 'Johnson', '1985-06-15', 'Female', '555-1234', '101 Main St'),
+('Bob', 'Smith', '1990-03-22', 'Male', '555-5678', '202 Elm St');
+
+INSERT INTO Doctors (FirstName, LastName, Specialization, Phone, Email) VALUES
+('Dr. Emily', 'Clark', 'Pediatrics', '555-8765', 'emily.clark@hospital.com'),
+('Dr. John', 'Doe', 'Cardiology', '555-4321', 'john.doe@hospital.com');
+
+SQL Queries for Appointments and Billing
+-- Scheduling an Appointment
+INSERT INTO Appointments (PatientID, DoctorID, AppointmentDate, Status) 
+VALUES (1, 1, '2024-09-01 10:00:00', 'Scheduled');
+
+-- Adding Treatment Details
+INSERT INTO Treatments (AppointmentID, Diagnosis, Prescription, Notes) 
+VALUES (@last_appointment_id, 'Routine Checkup', 'Vitamins', 'Follow up in 6 months');
+
+-- Adding Bill
+INSERT INTO Bills (PatientID, Amount, BillDate, Status) 
+VALUES (1, 150.00, NOW(), 'Paid');
+
+Sample Queries and Outputs
+Querying Appointments
+SELECT 
+    a.AppointmentID, 
+    p.FirstName AS PatientFirstName, 
+    p.LastName AS PatientLastName, 
+    d.FirstName AS DoctorFirstName, 
+    d.LastName AS DoctorLastName, 
+    a.AppointmentDate, 
+    a.Status
+FROM 
+    Appointments a
+JOIN 
+    Patients p ON a.PatientID = p.PatientID
+JOIN 
+    Doctors d ON a.DoctorID = d.DoctorID
+WHERE 
+    p.PatientID = 1;
+Sample Output:
+
+AppointmentID	PatientFirstName	PatientLastName	DoctorFirstName	DoctorLastName	AppointmentDate	Status
+1	Alice	Johnson	Dr. Emily	Clark	2024-09-01 10
+
+Querying Bills
+SELECT 
+    b.BillID, 
+    p.FirstName AS PatientFirstName, 
+    p.LastName AS PatientLastName, 
+    b.Amount, 
+    b.BillDate, 
+    b.Status
+FROM 
+    Bills b
+JOIN 
+    Patients p ON b.PatientID = p.PatientID
+WHERE 
+    p.PatientID = 1;
+
+Challenges Faced
+Data Integrity: Ensuring referential integrity between tables was crucial. Foreign key constraints were used effectively.
+Complex Queries: Writing complex JOIN queries to retrieve information from multiple tables required a good understanding of SQL.
+
