@@ -1,0 +1,100 @@
+CREATE TABLE Patients (
+    PatientID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    DOB DATE,
+    Gender VARCHAR(10),
+    Phone VARCHAR(15),
+    Address VARCHAR(255)
+);
+
+CREATE TABLE Doctors (
+    DoctorID INT PRIMARY KEY AUTO_INCREMENT,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Specialization VARCHAR(100),
+    Phone VARCHAR(15),
+    Email VARCHAR(100)
+);
+
+CREATE TABLE Appointments (
+    AppointmentID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    DoctorID INT,
+    AppointmentDate DATETIME,
+    Status VARCHAR(20),
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID)
+);
+
+CREATE TABLE Treatments (
+    TreatmentID INT PRIMARY KEY AUTO_INCREMENT,
+    AppointmentID INT,
+    Diagnosis VARCHAR(255),
+    Prescription TEXT,
+    Notes TEXT,
+    FOREIGN KEY (AppointmentID) REFERENCES Appointments(AppointmentID)
+);
+
+CREATE TABLE Bills (
+    BillID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientID INT,
+    Amount DECIMAL(10, 2),
+    BillDate DATETIME,
+    Status VARCHAR(20),
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
+);
+
+INSERT INTO Patients (FirstName, LastName, DOB, Gender, Phone, Address) VALUES
+('Alice', 'Johnson', '1985-06-15', 'Female', '555-1234', '101 Main St'),
+('Bob', 'Smith', '1990-03-22', 'Male', '555-5678', '202 Elm St');
+
+INSERT INTO Doctors (FirstName, LastName, Specialization, Phone, Email) VALUES
+('Dr. Emily', 'Clark', 'Pediatrics', '555-8765', 'emily.clark@hospital.com'),
+('Dr. John', 'Doe', 'Cardiology', '555-4321', 'john.doe@hospital.com');
+
+INSERT INTO Appointments (PatientID, DoctorID, AppointmentDate, Status) 
+VALUES (1, 1, '2024-09-01 10:00:00', 'Scheduled');
+
+-- Get the last inserted AppointmentID
+SET @last_appointment_id = LAST_INSERT_ID();
+
+-- Inserting Treatment details
+INSERT INTO Treatments (AppointmentID, Diagnosis, Prescription, Notes) 
+VALUES (@last_appointment_id, 'Routine Checkup', 'Vitamins', 'Follow up in 6 months');
+
+-- Inserting Bill for the appointment
+INSERT INTO Bills (PatientID, Amount, BillDate, Status) 
+VALUES (1, 150.00, NOW(), 'Paid');
+
+SELECT 
+    a.AppointmentID, 
+    p.FirstName AS PatientFirstName, 
+    p.LastName AS PatientLastName, 
+    d.FirstName AS DoctorFirstName, 
+    d.LastName AS DoctorLastName, 
+    a.AppointmentDate, 
+    a.Status
+FROM 
+    Appointments a
+JOIN 
+    Patients p ON a.PatientID = p.PatientID
+JOIN 
+    Doctors d ON a.DoctorID = d.DoctorID
+WHERE 
+    p.PatientID = 1;  -- Replace with the desired PatientID
+
+-- Query for Bills
+SELECT 
+    b.BillID, 
+    p.FirstName AS PatientFirstName, 
+    p.LastName AS PatientLastName, 
+    b.Amount, 
+    b.BillDate, 
+    b.Status
+FROM 
+    Bills b
+JOIN 
+    Patients p ON b.PatientID = p.PatientID
+WHERE 
+    p.PatientID = 1;  -- Replace with the desired PatientID
