@@ -1,0 +1,27 @@
+Entity Relationship Diagram (ERD)
+
++----------------+        +----------------+        +----------------+
+|    Patients    |        |    Doctors     |        |  Appointments  |
+|----------------|        |----------------|        |----------------|
+| PatientID (PK) |<------M| DoctorID (PK)  |<------M| AppointmentID (PK)|
+| FirstName      |        | FirstName      |        | PatientID (FK) |
+| LastName       |        | LastName       |        | DoctorID (FK)  |
+| DOB            |        | Specialization  |        | AppointmentDate |
+| Gender         |        | Phone          |        | Status         |
+| Phone          |        | Email          |        +----------------+
+| Address        |        +----------------+
++----------------+
+         |
+         |
+         | 1
+         |
+         | M
++----------------+        +----------------+
+|    Bills       |        |   Treatments    |
+|----------------|        |----------------|
+| BillID (PK)    |        | TreatmentID (PK)|
+| PatientID (FK) |        | AppointmentID (FK)|
+| Amount         |        | Diagnosis       |
+| BillDate       |        | Prescription    |
+| Status         |        | Notes           |
++----------------+        +----------------+
